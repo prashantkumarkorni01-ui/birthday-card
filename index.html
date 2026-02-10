@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#05070c">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LEVEL 26 UNLOCKED</title>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  background:#05070c;
+  color:#00ffcc;
+  font-family: "Courier New", monospace;
+  height:100%;
+  overflow:hidden;
+}
+
+.screen{
+  display:none;
+  height:100%;
+  width:100%;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+
+#lock{
+  display:flex;
+}
+
+input,button{
+  background:black;
+  border:1px solid #00ffcc;
+  color:#00ffcc;
+  padding:12px;
+  font-size:16px;
+  margin-top:10px;
+}
+
+button{cursor:pointer}
+
+.terminal{
+  width:90%;
+  max-width:600px;
+  border:1px solid #00ffcc;
+  padding:15px;
+  background:#000;
+  box-shadow:0 0 25px #00ffcc55;
+}
+
+.typing{
+  white-space:pre-line;
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+.gallery{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.gallery img{
+  width:100px;
+  border-radius:8px;
+  animation: pop 1s ease forwards;
+  opacity:0;
+}
+
+@keyframes pop{
+  to{opacity:1; transform:scale(1.05)}
+}
+
+.logo{
+  width:180px;
+  margin-bottom:15px;
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+<img class="logo" src="logo.png">
+
+<div class="gallery">
+  <img src="photo1.jpg">
+  <img src="photo2.jpg">
+</div>
+
+<!-- LOCK SCREEN -->
+<div id="lock" class="screen">
+  <div class="terminal">
+    <p>🔒 SYSTEM LOCKED</p>
+    <p>Enter password to unlock LEVEL 26</p>
+    <input id="pass" placeholder="PASSWORD">
+    <button onclick="unlock()">UNLOCK</button>
+  </div>
+</div>
+
+<!-- MAIN SCREEN -->
+<div id="main" class="screen">
+  <img class="logo" src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAA..." />
+
+  <div class="terminal typing" id="text"></div>
+
+  <div class="gallery">
+    <img src="data:image/jpeg;base64,
+/9j/4AAQSkZJRgABAQAAAQABAAD..." />
+    <img src="data:image/jpeg;base64,
+/9j/4AAQSkZJRgABAQAAAQABAAD..." />
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/07/audio_4e6f82a6a2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let deferredPrompt = null;
+
+// ANDROID DETECTION
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+// CALL THIS AFTER UNLOCK
+function showAddToHomeScreen(){
+  const box = document.getElementById("a2hs");
+
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isInStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
+  if(isInStandalone) return; // already added
+
+  if(isIOS){
+    box.style.display = "block";
+  } else if(deferredPrompt){
+    box.style.display = "block";
+    box.innerHTML = `
+      📱 <b>Add to Home Screen</b><br><br>
+      Install this app for full-screen gamer mode 🎮<br><br>
+      <button onclick="installApp()">INSTALL</button>
+    `;
+  }
+}
+
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt = null;
+  }
+}
+</script>
+const msg = `
+> booting system...
+> loading gamer profile: PRAVEEN
+> references detected: Gran Turismo 🏎️ | Mortal Kombat 🥊 | FC ⚽
+> Hindi mode enabled 🇮🇳
+
+🎉 Congratulations Bro!
+Tumne life ka LEVEL 26 unlock kar liya 💙
+May your FPS be high and bugs be zero.
+
+READY PLAYER ONE.
+`;
+
+let i=0;
+function type(){
+  if(i<msg.length){
+    document.getElementById("text").innerText += msg.charAt(i);
+    i++;
+    setTimeout(type,25);
+  }
+}
+
+function unlock(){
+  if(pass.value==="26LEVEL"){
+    lock.style.display="none";
+    main.style.display="flex";
+    type();
+    startMusic();
+    startConfetti();
+  }else{
+    alert("ACCESS DENIED");
+  }
+}
+
+function startMusic(){
+  const m=document.getElementById("bgm");
+  m.volume=0;
+  m.play();
+  let v=0;
+  const fade=setInterval(()=>{
+    v+=0.01;
+    m.volume=v;
+    if(v>=0.4) clearInterval(fade);
+  },100);
+}
+
+/* CONFETTI */
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+let pieces=[];
+for(let i=0;i<150;i++){
+  pieces.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*6});
+}
+function startConfetti(){
+  setInterval(()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.fillStyle="#00ffcc";
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+      p.y+=2;
+      if(p.y>canvas.height)p.y=0;
+    });
+  },30);
+}
+</script>
+<div id="a2hs" style="
+display:none;
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#000;
+border:1px solid #00ffcc;
+padding:15px;
+color:#00ffcc;
+font-family:Courier New;
+z-index:9999;
+text-align:center;
+max-width:90%;
+box-shadow:0 0 20px #00ffcc88;
+">
+📱 <b>Add to Home Screen</b><br><br>
+For full-screen gamer mode 🎮<br>
+Tap <b>Share</b> → <b>Add to Home Screen</b>
+</div>
+
+
+</body>
+</html>
+
